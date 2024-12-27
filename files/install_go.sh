@@ -133,6 +133,9 @@ go mod init space_invaders
 go get github.com/golang/freetype/truetype
 go get github.com/hajimehoshi/ebiten/v2
 go get github.com/disintegration/gift github.com/nsf/termbox-go
+go get github.com/hajimehoshi/ebiten/v2/audio/mp3@v2.8.6
+go get github.com/hajimehoshi/ebiten/v2/audio@v2.8.6
+
 
 echo -e "${GREEN}------------------------------------------------${NC}"
 echo -e "${BLUE}All required packages and dependencies have been installed.${NC}"

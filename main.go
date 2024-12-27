@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"image/color"
@@ -11,6 +12,9 @@ import (
 
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/hajimehoshi/ebiten/v2/audio/mp3"
+	"github.com/hajimehoshi/ebiten/v2/audio/wav"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text"
@@ -60,6 +64,18 @@ var laserCannon Sprite
 // sprite for the laser beam
 var beam Sprite
 
+// sound effects
+var laserSound *audio.Player
+var explosionSound *audio.Player
+var gameOverSound *audio.Player
+var backgroundSound *audio.Player
+
+// audio context
+var audioContext *audio.Context
+
+// gameFont
+var gameFont font.Face
+
 // used for creating alien sprites
 func createAlien(x, y int, sprite, alt image.Rectangle, points int) (s Sprite) {
 	s = Sprite{
@@ -88,6 +104,37 @@ func loadFont(path string) font.Face {
 		DPI:  72, // Adjust DPI if needed
 	})
 }
+func loadAudio(path string) *audio.Player {
+	fileBytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var audioStream *audio.Player
+	if path[len(path)-3:] == "wav" {
+		wavStream, err := wav.DecodeWithSampleRate(audioContext.SampleRate(), bytes.NewReader(fileBytes))
+		if err != nil {
+			log.Fatal(err)
+		}
+		audioStream, err = audioContext.NewPlayer(wavStream)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	} else if path[len(path)-3:] == "mp3" {
+		mp3Stream, err := mp3.DecodeWithSampleRate(audioContext.SampleRate(), bytes.NewReader(fileBytes))
+		if err != nil {
+			log.Fatal(err)
+		}
+		audioStream, err = audioContext.NewPlayer(mp3Stream)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	}
+
+	return audioStream
+}
 func initGame() {
 	// load sprites image
 	imgFile, _, err := ebitenutil.NewImageFromFile("imgs/sprites.png")
@@ -114,7 +161,7 @@ func initGame() {
 	beam = Sprite{
 		size:     beamSprite,
 		Filter:   src.SubImage(beamSprite).(*ebiten.Image),
-		Position: image.Pt(laserCannon.Position.X+7, 400),
+		Position: image.Pt(laserCannon.Position.X+7, 250),
 		Status:   false,
 	}
 
@@ -138,8 +185,7 @@ func initGame() {
 			}
 		}
 	}
-	// Load the font
-	gameFont = loadFont("font/font.ttf")
+
 }
 
 // Game struct
@@ -175,6 +221,11 @@ func (g *Game) Update() error {
 		if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 			if !beam.Status {
 				g.beamShot = true
+				if laserSound != nil {
+					laserSound.Rewind()
+					laserSound.Play()
+				}
+
 			}
 		}
 		// exit the game
@@ -206,12 +257,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		// Draw a black background
 		screen.Fill(color.Black)
 
+		if gameOverSound != nil {
+			gameOverSound.Rewind()
+			gameOverSound.Play()
+		}
 		// Define the message and the "Try Again" button text
 		message := fmt.Sprintf("GAME OVER!\nFinal score: %d", g.score)
-
 		tryAgain := "Press ESC to Try Again"
-
-		// Get text bounds to calculate the center position
 
 		// Get text bounds to calculate the center position
 		messageBounds := text.BoundString(g.gameFont, message)
@@ -255,6 +307,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 				// alien dies, player scores points
 				aliens[i].Status = false
 				g.score += aliens[i].Points
+				// Play explosion sound effect
+				if explosionSound != nil {
+					explosionSound.Rewind()
+					explosionSound.Play()
+				}
 				// reset the laser beam
 				resetBeam()
 			} else {
@@ -316,7 +373,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("Score: %d", g.score))
 
 }
-
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return windowWidth, windowHeight
 }
@@ -379,17 +435,25 @@ func (g *Game) resetGame() {
 	}
 
 	laserCannon.Position = image.Pt(50, 400)
-	beam.Position = image.Pt(laserCannon.Position.X+7, 400)
+	beam.Position = image.Pt(laserCannon.Position.X+7, 250)
+	if backgroundSound != nil {
+		backgroundSound.Rewind()
+		backgroundSound.Play()
+	}
 }
-
-var gameFont font.Face
-
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 	ebiten.SetWindowTitle("Space Invaders")
 
-	initGame() // This is still needed to initialize other game elements
+	// Initialize the audio context
+	audioContext = audio.NewContext(48000)
+
+	// Load audio files
+	laserSound = loadAudio("files/laser.wav")
+	explosionSound = loadAudio("files/explosion.wav")
+	gameOverSound = loadAudio("files/game-over.mp3")
+	backgroundSound = loadAudio("files/background.wav")
 
 	game := &Game{
 		loop:           0,
@@ -397,9 +461,13 @@ func main() {
 		gameOver:       false,
 		alienDirection: 1,
 		score:          0,
-		gameFont:       loadFont("font/font.ttf"), // Initialize gameFont here
+		gameFont:       loadFont("font/font.ttf"),
 	}
-
+	initGame()
+	if backgroundSound != nil {
+		backgroundSound.Rewind()
+		backgroundSound.Play()
+	}
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)
 	}
