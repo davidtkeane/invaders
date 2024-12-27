@@ -1,21 +1,24 @@
 package main
 
 import (
-	"bytes"
-	"encoding/base64"
 	"fmt"
 	"image"
-	"image/png"
+	"image/color"
+	"io/ioutil"
+	"log"
 	"math/rand"
-	"os"
 	"time"
 
-	"github.com/disintegration/gift"
-	termbox "github.com/nsf/termbox-go"
+	"github.com/golang/freetype/truetype"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text"
+	"golang.org/x/image/font"
 )
 
 // parameters
-var windowWidth, windowHeight = 400, 300
+var windowWidth, windowHeight = 800, 600
 var aliensPerRow = 8
 var aliensStartCol = 100
 var alienSize = 30
@@ -23,8 +26,8 @@ var bombProbability = 0.005
 var bombSpeed = 10
 
 // sprites
-var src = getImage("imgs/sprites.png")
-var background = getImage("imgs/bg.png")
+var src *ebiten.Image
+var background *ebiten.Image
 var cannonSprite = image.Rect(20, 47, 38, 59)
 var cannonExplode = image.Rect(0, 47, 16, 57)
 var alien1Sprite = image.Rect(0, 0, 20, 14)
@@ -40,9 +43,9 @@ var bombSprite = image.Rect(0, 70, 10, 79)
 // Sprite represents a sprite in the game
 type Sprite struct {
 	size     image.Rectangle // the sprite size
-	Filter   *gift.GIFT      // normal filter used to draw the sprite
-	FilterA  *gift.GIFT      // alternate filter used to draw the sprite
-	FilterE  *gift.GIFT      // exploded filter used to draw the sprite
+	Filter   *ebiten.Image   // normal filter used to draw the sprite
+	FilterA  *ebiten.Image   // alternate filter used to draw the sprite
+	FilterE  *ebiten.Image   // exploded filter used to draw the sprite
 	Position image.Point     // top left position of the sprite
 	Status   bool            // alive or dead
 	Points   int             // number of points if destroyed
@@ -52,205 +55,276 @@ var aliens = []Sprite{}
 var bombs = []Sprite{}
 
 // sprite for laser cannon
-var laserCannon = Sprite{
-	size:     cannonSprite,
-	Filter:   gift.New(gift.Crop(cannonSprite)),
-	FilterE:  gift.New(gift.Crop(cannonExplode)),
-	Position: image.Pt(50, 250),
-	Status:   true,
-}
+var laserCannon Sprite
 
 // sprite for the laser beam
-var beam = Sprite{
-	size:     beamSprite,
-	Filter:   gift.New(gift.Crop(beamSprite)),
-	Position: image.Pt(laserCannon.Position.X+7, 250),
-	Status:   false,
-}
+var beam Sprite
 
 // used for creating alien sprites
 func createAlien(x, y int, sprite, alt image.Rectangle, points int) (s Sprite) {
 	s = Sprite{
 		size:     sprite,
-		Filter:   gift.New(gift.Crop(sprite)),
-		FilterA:  gift.New(gift.Crop(alt)),
-		FilterE:  gift.New(gift.Crop(alienExplode)),
+		Filter:   src.SubImage(sprite).(*ebiten.Image),
+		FilterA:  src.SubImage(alt).(*ebiten.Image),
+		FilterE:  src.SubImage(alienExplode).(*ebiten.Image),
 		Position: image.Pt(x, y),
 		Status:   true,
 		Points:   points,
 	}
 	return
 }
+func loadFont(path string) font.Face {
+	fontBytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-func main() {
-	rand.Seed(time.Now().UTC().UnixNano())
-	err := termbox.Init()
+	ttfFont, err := truetype.Parse(fontBytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return truetype.NewFace(ttfFont, &truetype.Options{
+		Size: 24, // Adjust the font size as needed
+		DPI:  72, // Adjust DPI if needed
+	})
+}
+func initGame() {
+	// load sprites image
+	imgFile, _, err := ebitenutil.NewImageFromFile("imgs/sprites.png")
 	if err != nil {
 		panic(err)
 	}
+	src = imgFile
 
-	// game variables
-	loop := 0           // game loop
-	beamShot := false   // the instance where the beam is shot
-	gameOver := false   // end of game
-	alienDirection := 1 // direction where alien is heading
-	score := 0          // number of points scored in the game so far
+	// load background image
+	bg, _, err := ebitenutil.NewImageFromFile("imgs/bg.png")
+	if err != nil {
+		panic(err)
+	}
+	background = bg
+	laserCannon = Sprite{
+		size:     cannonSprite,
+		Filter:   src.SubImage(cannonSprite).(*ebiten.Image),
+		FilterE:  src.SubImage(cannonExplode).(*ebiten.Image),
+		Position: image.Pt(50, 400),
+		Status:   true,
+	}
 
-	// poll for keyboard events in another goroutine
-	events := make(chan termbox.Event, 1000)
-	go func() {
-		for {
-			events <- termbox.PollEvent()
-		}
-	}()
-
-	// show the start screen
-	startScreen := getImage("imgs/start.png")
-	printImage(startScreen)
-start:
-	for {
-		switch ev := termbox.PollEvent(); ev.Type {
-		case termbox.EventKey:
-			if ev.Ch == 's' || ev.Ch == 'S' {
-				break start
-			}
-			if ev.Ch == 'q' {
-				gameOver = true
-				break start
-			}
-		}
+	// sprite for the laser beam
+	beam = Sprite{
+		size:     beamSprite,
+		Filter:   src.SubImage(beamSprite).(*ebiten.Image),
+		Position: image.Pt(laserCannon.Position.X+7, 400),
+		Status:   false,
 	}
 
 	// populate the aliens
-	for i := aliensStartCol; i < aliensStartCol+(alienSize*aliensPerRow); i += alienSize {
-		aliens = append(aliens, createAlien(i, 30, alien1Sprite, alien1aSprite, 30))
+	rows := 5
+	cols := 12
+	for row := 0; row < rows; row++ {
+		for col := 0; col < cols; col++ {
+			x := aliensStartCol + col*(alienSize+10)
+			y := 30 + row*30
+			points := 10
+			if row == 0 {
+				points = 30
+				aliens = append(aliens, createAlien(x, y, alien1Sprite, alien1aSprite, points))
+			} else if row == 1 || row == 2 {
+				points = 20
+				aliens = append(aliens, createAlien(x, y, alien2Sprite, alien2aSprite, points))
+			} else if row == 3 || row == 4 {
+				points = 10
+				aliens = append(aliens, createAlien(x, y, alien3Sprite, alien3aSprite, points))
+			}
+		}
 	}
-	for i := aliensStartCol; i < aliensStartCol+(30*aliensPerRow); i += alienSize {
-		aliens = append(aliens, createAlien(i, 55, alien2Sprite, alien2aSprite, 20))
+	// Load the font
+	gameFont = loadFont("font/font.ttf")
+}
+
+// Game struct
+type Game struct {
+	loop           int           // game loop
+	beamShot       bool          // the instance where the beam is shot
+	gameOver       bool          // end of game
+	alienDirection int           // direction where alien is heading
+	score          int           // number of points scored in the game so far
+	startScreen    *ebiten.Image // Start screen image
+	gameFont       font.Face
+}
+
+func (g *Game) Update() error {
+	if g.gameOver {
+		if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
+			g.resetGame()
+		}
+		return nil
 	}
-	for i := aliensStartCol; i < aliensStartCol+(30*aliensPerRow); i += alienSize {
-		aliens = append(aliens, createAlien(i, 80, alien3Sprite, alien3aSprite, 10))
-	}
 
-	// main game loop
-	for !gameOver {
-		// if any of the keyboard events are captured
-		select {
-		case ev := <-events:
-			if ev.Type == termbox.EventKey {
-				// exit the game
-				if ev.Key == termbox.KeyCtrlQ {
-					gameOver = true
-				}
-				if ev.Key == termbox.KeySpace {
-					if beam.Status == false {
-						beamShot = true
-					}
-				}
-				if ev.Key == termbox.KeyArrowRight {
-					laserCannon.Position.X += 10
-				}
-				if ev.Key == termbox.KeyArrowLeft {
-					laserCannon.Position.X -= 10
-				}
-			}
-
-		default:
-
+	// if game is not over, handle input
+	if !g.gameOver {
+		// move laser cannon left and right
+		if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+			laserCannon.Position.X += 10
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+			laserCannon.Position.X -= 10
 		}
 
-		// create background
-		dst := image.NewRGBA(image.Rect(0, 0, windowWidth, windowHeight))
-		gift.New().Draw(dst, background)
-
-		// process aliens
-		for i := 0; i < len(aliens); i++ {
-			aliens[i].Position.X = aliens[i].Position.X + 5*alienDirection
-			if aliens[i].Status {
-				// if alien is hit by a laser beam
-				if collide(aliens[i], beam) {
-					// draw the explosion
-					aliens[i].FilterE.DrawAt(dst, src, image.Pt(aliens[i].Position.X, aliens[i].Position.Y), gift.OverOperator)
-					// alien dies, player scores points
-					aliens[i].Status = false
-					score += aliens[i].Points
-					// reset the laser beam
-					resetBeam()
-				} else {
-					// show alternating alients
-					if loop%2 == 0 {
-						aliens[i].Filter.DrawAt(dst, src, image.Pt(aliens[i].Position.X, aliens[i].Position.Y), gift.OverOperator)
-					} else {
-						aliens[i].FilterA.DrawAt(dst, src, image.Pt(aliens[i].Position.X, aliens[i].Position.Y), gift.OverOperator)
-					}
-					// drop torpedoes
-					if rand.Float64() < bombProbability {
-						dropBomb(aliens[i])
-					}
-				}
+		// fire beam
+		if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
+			if !beam.Status {
+				g.beamShot = true
 			}
 		}
-
-		// draw bombs, if laser cannon is hit, game over
-		for i := 0; i < len(bombs); i++ {
-			bombs[i].Position.Y = bombs[i].Position.Y + bombSpeed
-			bombs[i].Filter.DrawAt(dst, src, image.Pt(bombs[i].Position.X, bombs[i].Position.Y), gift.OverOperator)
-			if collide(bombs[i], laserCannon) {
-				gameOver = true
-				laserCannon.FilterE.DrawAt(dst, src, image.Pt(laserCannon.Position.X, laserCannon.Position.Y), gift.OverOperator)
-			}
-		}
-		// draw the laser cannon unless it's been destroyed
-		if !gameOver {
-			laserCannon.Filter.DrawAt(dst, src, image.Pt(laserCannon.Position.X, laserCannon.Position.Y), gift.OverOperator)
-		}
-
-		// move the aliens back and forth
-		if aliens[0].Position.X < alienSize || aliens[aliensPerRow-1].Position.X > windowWidth-(2*alienSize) {
-			alienDirection = alienDirection * -1
-			for i := 0; i < len(aliens); i++ {
-				aliens[i].Position.Y = aliens[i].Position.Y + 10
-			}
+		// exit the game
+		if inpututil.IsKeyJustPressed(ebiten.KeyQ) || inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
+			g.gameOver = true
 		}
 
 		// if the beam is shot, place the beam at start of the cannon
-		if beamShot {
+		if g.beamShot {
 			beam.Position.X = laserCannon.Position.X + 7
 			beam.Status = true
-			beamShot = false
+			g.beamShot = false
 		}
-
-		// keep drawing the beam as it moves every loop
-		if beam.Status {
-			beam.Filter.DrawAt(dst, src, image.Pt(beam.Position.X, beam.Position.Y), gift.OverOperator)
-			beam.Position.Y -= 10
-		}
-
-		// if the beam leaves the window reset it
-		if beam.Position.Y < 0 {
-			resetBeam()
-		}
-
-		// if the aliens reach the position of the cannon, it's game over!
-		if aliens[0].Position.Y > 180 {
-			gameOver = true
-		}
-		printImage(dst)
-		// pause a bit before ending the game
-		if gameOver {
-			time.Sleep(time.Second)
-		}
-		fmt.Println("\n\nSCORE:", score)
-		loop++
 	}
-	termbox.Close()
-	fmt.Println("\nGAME OVER!\nFinal score:", score)
+
+	// move the aliens back and forth
+	if aliens[0].Position.X < alienSize || aliens[aliensPerRow-1].Position.X > windowWidth-(2*alienSize) {
+		g.alienDirection = g.alienDirection * -1
+		for i := 0; i < len(aliens); i++ {
+			aliens[i].Position.Y = aliens[i].Position.Y + 10
+		}
+	}
+	return nil
+}
+
+func (g *Game) Draw(screen *ebiten.Image) {
+	// if the game is over, draw the background with the game over message
+	if g.gameOver {
+		// Draw a black background
+		screen.Fill(color.Black)
+
+		// Define the message and the "Try Again" button text
+		message := fmt.Sprintf("GAME OVER!\nFinal score: %d", g.score)
+
+		tryAgain := "Press ESC to Try Again"
+
+		// Get text bounds to calculate the center position
+
+		// Get text bounds to calculate the center position
+		messageBounds := text.BoundString(g.gameFont, message)
+		tryAgainBounds := text.BoundString(g.gameFont, tryAgain)
+
+		// Calculate the center position of the text
+		x := (windowWidth - messageBounds.Dx()) / 2
+		y := (windowHeight - messageBounds.Dy()) / 2
+
+		// Calculate the center position of the "Try Again" Button
+		xTryAgain := (windowWidth - tryAgainBounds.Dx()) / 2
+		yTryAgain := y + messageBounds.Dy() + 20 // move the "Try Again" button 20 px bellow
+
+		// Draw text at the center of the screen
+		text.Draw(screen, message, g.gameFont, x, y, color.White)
+		text.Draw(screen, tryAgain, g.gameFont, xTryAgain, yTryAgain, color.White)
+		return
+	}
+
+	// Calculate scale factors
+	bgWidth, bgHeight := background.Bounds().Dx(), background.Bounds().Dy()
+	xScale := float64(windowWidth) / float64(bgWidth)
+	yScale := float64(windowHeight) / float64(bgHeight)
+
+	// Apply scale transform
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Scale(xScale, yScale)
+	// draw the background
+	screen.DrawImage(background, op)
+
+	// process aliens
+	for i := 0; i < len(aliens); i++ {
+		aliens[i].Position.X = aliens[i].Position.X + 5*g.alienDirection
+		if aliens[i].Status {
+			// if alien is hit by a laser beam
+			if collide(aliens[i], beam) {
+				// draw the explosion
+				op := &ebiten.DrawImageOptions{}
+				op.GeoM.Translate(float64(aliens[i].Position.X), float64(aliens[i].Position.Y))
+				screen.DrawImage(aliens[i].FilterE, op)
+				// alien dies, player scores points
+				aliens[i].Status = false
+				g.score += aliens[i].Points
+				// reset the laser beam
+				resetBeam()
+			} else {
+				// show alternating alients
+				op := &ebiten.DrawImageOptions{}
+				op.GeoM.Translate(float64(aliens[i].Position.X), float64(aliens[i].Position.Y))
+				if g.loop%2 == 0 {
+					screen.DrawImage(aliens[i].Filter, op)
+				} else {
+					screen.DrawImage(aliens[i].FilterA, op)
+				}
+			}
+
+			// drop torpedoes
+			if rand.Float64() < bombProbability {
+				dropBomb(aliens[i])
+			}
+		}
+	}
+
+	// draw bombs, if laser cannon is hit, game over
+	for i := 0; i < len(bombs); i++ {
+		bombs[i].Position.Y = bombs[i].Position.Y + bombSpeed
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(bombs[i].Position.X), float64(bombs[i].Position.Y))
+		screen.DrawImage(bombs[i].Filter, op)
+		if collide(bombs[i], laserCannon) {
+			g.gameOver = true
+			op := &ebiten.DrawImageOptions{}
+			op.GeoM.Translate(float64(laserCannon.Position.X), float64(laserCannon.Position.Y))
+			screen.DrawImage(laserCannon.FilterE, op)
+		}
+	}
+	// draw the laser cannon unless it's been destroyed
+	if !g.gameOver {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(laserCannon.Position.X), float64(laserCannon.Position.Y))
+		screen.DrawImage(laserCannon.Filter, op)
+	}
+
+	// keep drawing the beam as it moves every loop
+	if beam.Status {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(beam.Position.X), float64(beam.Position.Y))
+		screen.DrawImage(beam.Filter, op)
+		beam.Position.Y -= 10
+	}
+	// if the beam leaves the window reset it
+	if beam.Position.Y < 0 {
+		resetBeam()
+	}
+
+	// if the aliens reach the position of the cannon, it's game over!
+	if aliens[0].Position.Y > 180 {
+		g.gameOver = true
+	}
+	g.loop++
+	// show the score on the top left corner of the screen
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("Score: %d", g.score))
+
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	return windowWidth, windowHeight
 }
 
 func dropBomb(alien Sprite) {
 	torpedo := Sprite{
 		size:     bombSprite,
-		Filter:   gift.New(gift.Crop(bombSprite)),
+		Filter:   src.SubImage(bombSprite).(*ebiten.Image),
 		Position: image.Pt(alien.Position.X+7, alien.Position.Y),
 		Status:   true,
 	}
@@ -273,23 +347,60 @@ func collide(s1, s2 Sprite) bool {
 	return false
 }
 
-// this only works for iTerm2!
-func printImage(img image.Image) {
-	var buf bytes.Buffer
-	png.Encode(&buf, img)
-	imgBase64Str := base64.StdEncoding.EncodeToString(buf.Bytes())
-	fmt.Printf("\x1b[2;0H\x1b]1337;File=inline=1:%s\a", imgBase64Str)
+func (g *Game) resetGame() {
+	g.loop = 0           // game loop
+	g.beamShot = false   // the instance where the beam is shot
+	g.gameOver = false   // end of game
+	g.alienDirection = 1 // direction where alien is heading
+	g.score = 0          // number of points scored in the game so far
+
+	aliens = []Sprite{}
+	bombs = []Sprite{}
+
+	// populate the aliens
+	rows := 5
+	cols := 12
+	for row := 0; row < rows; row++ {
+		for col := 0; col < cols; col++ {
+			x := aliensStartCol + col*(alienSize+10)
+			y := 30 + row*30
+			points := 10
+			if row == 0 {
+				points = 30
+				aliens = append(aliens, createAlien(x, y, alien1Sprite, alien1aSprite, points))
+			} else if row == 1 || row == 2 {
+				points = 20
+				aliens = append(aliens, createAlien(x, y, alien2Sprite, alien2aSprite, points))
+			} else if row == 3 || row == 4 {
+				points = 10
+				aliens = append(aliens, createAlien(x, y, alien3Sprite, alien3aSprite, points))
+			}
+		}
+	}
+
+	laserCannon.Position = image.Pt(50, 400)
+	beam.Position = image.Pt(laserCannon.Position.X+7, 400)
 }
 
-func getImage(filePath string) image.Image {
-	imgFile, err := os.Open(filePath)
-	defer imgFile.Close()
-	if err != nil {
-		fmt.Println("Cannot read file:", err)
+var gameFont font.Face
+
+func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
+	ebiten.SetWindowSize(windowWidth, windowHeight)
+	ebiten.SetWindowTitle("Space Invaders")
+
+	initGame() // This is still needed to initialize other game elements
+
+	game := &Game{
+		loop:           0,
+		beamShot:       false,
+		gameOver:       false,
+		alienDirection: 1,
+		score:          0,
+		gameFont:       loadFont("font/font.ttf"), // Initialize gameFont here
 	}
-	img, _, err := image.Decode(imgFile)
-	if err != nil {
-		fmt.Println("Cannot decode file:", err)
+
+	if err := ebiten.RunGame(game); err != nil {
+		log.Fatal(err)
 	}
-	return img
 }
