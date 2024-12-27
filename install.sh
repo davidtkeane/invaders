@@ -24,7 +24,7 @@ echo ""
 echo ""
 echo "################################################"
 echo "#     Welcome to Space Invaders on Demand!     #"
-echo "#                 Made by Dave                 #"
+echo "#                Made by Dave 🍺               #"
 echo "################################################"
 echo ""
 
@@ -141,10 +141,19 @@ echo -e "${YELLOW}go run ./text.go${NC}"
 echo -e "${GREEN}------------------------------------------------${NC}"
 
 # Run the Game
-read -p "Do you want to run the game now? [y/N] " -n 1 -r
+read -p "Do you want to run the game now? 🍺 [y/N] " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-    echo "Running the game...."
-        go run ./text.go
+then
+    echo "Running the game....🍺 "
+    go run ./text.go
+    echo "Thank you for playing!" # This will always print after the game finishes.
+else
+    echo ""
+    echo "THere's a little message from our solar system  🍺 :"
+    echo ""
+    cat font/girlfriend.txt  # Assuming font/girlfriend.txt exists
+    echo ""
+    echo "Thank you for playing. 🍺"
+    echo ""
 fi
