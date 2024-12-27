@@ -19,6 +19,14 @@ LOGO="
  $$    $$/ $$    $$/      $$    $$/ $$    $$/ 
  $$$$$$/   $$$$$$/        $$$$$$/   $$$$$$/  
 "
+# Welcome Banner
+echo ""
+echo ""
+echo "################################################"
+echo "#     Welcome to Space Invaders on Demand!     #"
+echo "#                 Made by Dave                 #"
+echo "################################################"
+echo ""
 
 # --- Function to check if a command exists ---
 command_exists() {
@@ -78,7 +86,6 @@ install_go() {
       exit 1
   fi
 
-
   # Extract Go
    echo -e "${BLUE}Extracting Go...${NC}"
   sudo tar -C /usr/local -xzf "$GO_FILE"
@@ -95,8 +102,8 @@ install_go() {
   echo -e "${BLUE}Adding Go to PATH${NC}"
   export PATH=$PATH:/usr/local/go/bin
 
-   echo -e "${GREEN}Go installed successfully. Please close this terminal window and open a new terminal window, for the changes to apply.${NC}"
-   echo -e "${YELLOW}To install it for all users, check: https://go.dev/doc/install${NC}"
+    echo -e "${GREEN}Go installed successfully. Please close this terminal window and open a new terminal window, for the changes to apply.${NC}"
+    echo -e "${YELLOW}To install it for all users, check: https://go.dev/doc/install${NC}"
 
   # Test Go installation
   if command_exists go; then
