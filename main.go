@@ -8,6 +8,10 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"os/user"
+	"sort"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/golang/freetype/truetype"
@@ -28,6 +32,8 @@ var aliensStartCol = 100
 var alienSize = 30
 var bombProbability = 0.005
 var bombSpeed = 10
+var barrierYPosition = 450 // added for barriers position
+var playerYPosition = 400
 
 // sprites
 var src *ebiten.Image
@@ -43,6 +49,7 @@ var alien3aSprite = image.Rect(20, 27, 40, 40)
 var alienExplode = image.Rect(0, 60, 16, 68)
 var beamSprite = image.Rect(20, 60, 22, 65)
 var bombSprite = image.Rect(0, 70, 10, 79)
+var barrierSprite = image.Rect(40, 0, 50, 10) // added barrier sprite
 
 // Sprite represents a sprite in the game
 type Sprite struct {
@@ -57,6 +64,7 @@ type Sprite struct {
 
 var aliens = []Sprite{}
 var bombs = []Sprite{}
+var barriers = []Sprite{} // added barriers array
 
 // sprite for laser cannon
 var laserCannon Sprite
@@ -69,12 +77,25 @@ var laserSound *audio.Player
 var explosionSound *audio.Player
 var gameOverSound *audio.Player
 var backgroundSound *audio.Player
+var endGameSound *audio.Player // new end game sound
 
 // audio context
 var audioContext *audio.Context
 
 // gameFont
 var gameFont font.Face
+
+// High Score
+var highScores []HighScore
+var playerName string
+
+const maxHighScores = 5
+
+// high score struct
+type HighScore struct {
+	Name  string
+	Score int
+}
 
 // used for creating alien sprites
 func createAlien(x, y int, sprite, alt image.Rectangle, points int) (s Sprite) {
@@ -135,6 +156,16 @@ func loadAudio(path string) *audio.Player {
 
 	return audioStream
 }
+func createBarrier(x, y int) (s Sprite) {
+	s = Sprite{
+		size:     barrierSprite,
+		Filter:   src.SubImage(barrierSprite).(*ebiten.Image),
+		Position: image.Pt(x, y),
+		Status:   true,
+	}
+	return
+}
+
 func initGame() {
 	// load sprites image
 	imgFile, _, err := ebitenutil.NewImageFromFile("imgs/sprites.png")
@@ -149,11 +180,12 @@ func initGame() {
 		panic(err)
 	}
 	background = bg
+
 	laserCannon = Sprite{
 		size:     cannonSprite,
 		Filter:   src.SubImage(cannonSprite).(*ebiten.Image),
 		FilterE:  src.SubImage(cannonExplode).(*ebiten.Image),
-		Position: image.Pt(50, 400),
+		Position: image.Pt(50, playerYPosition),
 		Status:   true,
 	}
 
@@ -185,7 +217,75 @@ func initGame() {
 			}
 		}
 	}
+	// Add barriers
+	barrierWidth := (windowWidth - 100) / 4
+	barriers = append(barriers, createBarrier(100, barrierYPosition))
+	barriers = append(barriers, createBarrier(100+barrierWidth, barrierYPosition))
+	barriers = append(barriers, createBarrier(100+2*barrierWidth, barrierYPosition))
 
+	// Load the font
+	gameFont = loadFont("font/font.ttf")
+
+	// Load audio files
+	laserSound = loadAudio("files/laser.wav")
+	explosionSound = loadAudio("files/explosion.wav")
+	gameOverSound = loadAudio("files/game-over.mp3")
+	backgroundSound = loadAudio("files/background.wav")
+	endGameSound = loadAudio("files/end-game.mp3") // new end game sound
+	loadHighScores()
+
+}
+
+// load high scores from a file
+func loadHighScores() {
+	highScores = []HighScore{}
+	// Read from the file
+	content, err := ioutil.ReadFile("highscores.txt")
+	if err == nil {
+		lines := strings.Split(string(content), "\n")
+
+		for _, line := range lines {
+			if strings.TrimSpace(line) == "" {
+				continue
+			}
+			parts := strings.Split(line, ",")
+			if len(parts) != 2 {
+				continue
+			}
+			name := parts[0]
+			score, err := strconv.Atoi(parts[1])
+			if err != nil {
+				continue
+			}
+			highScores = append(highScores, HighScore{Name: name, Score: score})
+		}
+	}
+	sortHighScores()
+}
+func saveHighScores() {
+	var sb strings.Builder
+	for _, score := range highScores {
+		sb.WriteString(score.Name)
+		sb.WriteString(",")
+		sb.WriteString(strconv.Itoa(score.Score))
+		sb.WriteString("\n")
+	}
+	ioutil.WriteFile("highscores.txt", []byte(sb.String()), 0644)
+}
+func sortHighScores() {
+	sort.Slice(highScores, func(i, j int) bool {
+		return highScores[i].Score > highScores[j].Score
+	})
+	if len(highScores) > maxHighScores {
+		highScores = highScores[:maxHighScores]
+	}
+}
+
+// add the score to high scores
+func addHighScore(score int) {
+	highScores = append(highScores, HighScore{Name: playerName, Score: score})
+	sortHighScores()
+	saveHighScores()
 }
 
 // Game struct
@@ -197,6 +297,7 @@ type Game struct {
 	score          int           // number of points scored in the game so far
 	startScreen    *ebiten.Image // Start screen image
 	gameFont       font.Face
+	lives          int
 }
 
 func (g *Game) Update() error {
@@ -215,6 +316,18 @@ func (g *Game) Update() error {
 		}
 		if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
 			laserCannon.Position.X -= 10
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyDown) {
+			playerYPosition = min(windowHeight-50, playerYPosition+5)
+			for i := range barriers {
+				barriers[i].Position.Y = barrierYPosition + 5
+			}
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyUp) {
+			playerYPosition = max(100, playerYPosition-5)
+			for i := range barriers {
+				barriers[i].Position.Y = barrierYPosition - 5
+			}
 		}
 
 		// fire beam
@@ -256,18 +369,20 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	if g.gameOver {
 		// Draw a black background
 		screen.Fill(color.Black)
-
-		if gameOverSound != nil {
-			gameOverSound.Rewind()
-			gameOverSound.Play()
+		if endGameSound != nil {
+			endGameSound.Rewind()
+			endGameSound.Play()
 		}
+
 		// Define the message and the "Try Again" button text
-		message := fmt.Sprintf("GAME OVER!\nFinal score: %d", g.score)
-		tryAgain := "Press ESC to Try Again"
+		message := fmt.Sprintf("GAME OVER!\n\nFinal score: %d", g.score)
+		tryAgain := "Press Enter to Play again"
+		closeGame := "Press Esc To close the game"
 
 		// Get text bounds to calculate the center position
 		messageBounds := text.BoundString(g.gameFont, message)
 		tryAgainBounds := text.BoundString(g.gameFont, tryAgain)
+		closeGameBounds := text.BoundString(g.gameFont, closeGame)
 
 		// Calculate the center position of the text
 		x := (windowWidth - messageBounds.Dx()) / 2
@@ -275,11 +390,23 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		// Calculate the center position of the "Try Again" Button
 		xTryAgain := (windowWidth - tryAgainBounds.Dx()) / 2
-		yTryAgain := y + messageBounds.Dy() + 20 // move the "Try Again" button 20 px bellow
+		yTryAgain := y + messageBounds.Dy() + 40 // move the "Try Again" button 20 px bellow
+
+		xCloseGame := (windowWidth - closeGameBounds.Dx()) / 2
+		yCloseGame := yTryAgain + tryAgainBounds.Dy() + 15
 
 		// Draw text at the center of the screen
 		text.Draw(screen, message, g.gameFont, x, y, color.White)
 		text.Draw(screen, tryAgain, g.gameFont, xTryAgain, yTryAgain, color.White)
+		text.Draw(screen, closeGame, g.gameFont, xCloseGame, yCloseGame, color.White)
+
+		yHighScore := yCloseGame + closeGameBounds.Dy() + 30
+		text.Draw(screen, "High Scores:", g.gameFont, (windowWidth-text.BoundString(g.gameFont, "High Scores:").Dx())/2, yHighScore, color.White)
+		yHighScore += text.BoundString(g.gameFont, "High Scores:").Dy() + 10
+		for i, score := range highScores {
+			text.Draw(screen, fmt.Sprintf("%d. %s: %d", i+1, score.Name, score.Score), g.gameFont, (windowWidth-text.BoundString(g.gameFont, fmt.Sprintf("%d. %s: %d", i+1, score.Name, score.Score)).Dx())/2, yHighScore, color.White)
+			yHighScore += text.BoundString(g.gameFont, fmt.Sprintf("%d. %s: %d", i+1, score.Name, score.Score)).Dy() + 5
+		}
 		return
 	}
 
@@ -293,6 +420,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	op.GeoM.Scale(xScale, yScale)
 	// draw the background
 	screen.DrawImage(background, op)
+
+	// Draw barriers
+	for _, barrier := range barriers {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(barrier.Position.X), float64(barrier.Position.Y))
+		screen.DrawImage(barrier.Filter, op)
+	}
 
 	// process aliens
 	for i := 0; i < len(aliens); i++ {
@@ -339,7 +473,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op.GeoM.Translate(float64(bombs[i].Position.X), float64(bombs[i].Position.Y))
 		screen.DrawImage(bombs[i].Filter, op)
 		if collide(bombs[i], laserCannon) {
-			g.gameOver = true
+			g.lives--
+			if g.lives <= 0 {
+				g.gameOver = true
+				addHighScore(g.score)
+			} else {
+				resetBeam()
+				laserCannon.Position.Y = playerYPosition
+			}
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(float64(laserCannon.Position.X), float64(laserCannon.Position.Y))
 			screen.DrawImage(laserCannon.FilterE, op)
@@ -365,12 +506,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 
 	// if the aliens reach the position of the cannon, it's game over!
-	if aliens[0].Position.Y > 180 {
-		g.gameOver = true
+	for i := range aliens {
+		if aliens[i].Position.Y > playerYPosition-50 {
+			g.gameOver = true
+			addHighScore(g.score)
+		}
 	}
 	g.loop++
 	// show the score on the top left corner of the screen
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("Score: %d", g.score))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("Score: %d    Lives: %d", g.score, g.lives))
 
 }
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -409,6 +553,7 @@ func (g *Game) resetGame() {
 	g.gameOver = false   // end of game
 	g.alienDirection = 1 // direction where alien is heading
 	g.score = 0          // number of points scored in the game so far
+	g.lives = 3          // reset lives
 
 	aliens = []Sprite{}
 	bombs = []Sprite{}
@@ -434,18 +579,19 @@ func (g *Game) resetGame() {
 		}
 	}
 
-	laserCannon.Position = image.Pt(50, 400)
+	laserCannon.Position = image.Pt(50, playerYPosition)
 	beam.Position = image.Pt(laserCannon.Position.X+7, 250)
+
 	if backgroundSound != nil {
 		backgroundSound.Rewind()
 		backgroundSound.Play()
 	}
 }
+
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 	ebiten.SetWindowTitle("Space Invaders")
-
 	// Initialize the audio context
 	audioContext = audio.NewContext(48000)
 
@@ -454,6 +600,15 @@ func main() {
 	explosionSound = loadAudio("files/explosion.wav")
 	gameOverSound = loadAudio("files/game-over.mp3")
 	backgroundSound = loadAudio("files/background.wav")
+	endGameSound = loadAudio("files/end-game.mp3")
+
+	// Load username
+	user, err := user.Current()
+	if err == nil {
+		playerName = user.Username
+	} else {
+		playerName = "Player"
+	}
 
 	game := &Game{
 		loop:           0,
@@ -462,6 +617,7 @@ func main() {
 		alienDirection: 1,
 		score:          0,
 		gameFont:       loadFont("font/font.ttf"),
+		lives:          3,
 	}
 	initGame()
 	if backgroundSound != nil {
