@@ -25,7 +25,7 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 ![GitHub User's stars](https://img.shields.io/github/stars/davidtkeane)
 <br>
 
-## <h2 align="left">🤙 Space Invaders Main Screen>/h2>
+## <h2 align="left">🤙 Space Invaders Main Screen</h2>
 
 <a href="https://i.imgur.com/x3SLXY5.png"><img src="https://i.imgur.com/x3SLXY5.png" alt="Space Invaders Screenshot" width="50%"></a>
 
