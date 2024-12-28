@@ -87,6 +87,9 @@ go run main.go
 
 ## Tree
 
+```bash
+$ tree
+
 invaders/
 |
 ├── files/
@@ -110,8 +113,7 @@ invaders/
 ├── go.mod                 # Go module file
 ├── go.sum                 # Go module checksum file
 └── main.go                # Main Go source file
-
-
+```
 <----->
 # Writing Space Invaders with Go
 
