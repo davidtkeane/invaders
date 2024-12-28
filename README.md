@@ -1,24 +1,30 @@
-<h1 align="center">Hi, guys! <img src="https://ibb.co/QY5T9fs" width="28px" alt="👋"></h1>
+<h1 align="center">Hi, guys! <img src="https://imgur.com/a/53BYVf9" width="28px" alt=""></h1>
 
-This Python script is for a voice interface chatbot named Jervis. It uses OpenAI's GPT-3.5-turbo-instruct model to respond to user input. The user can interact with the chatbot through speech, and the chatbot responds with text and/or speech. The conversation can be saved as an MP3 file and emailed to a specified address. The conversation is also logged to a MongoDB database.
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/53BYVf9" data-context="false" ><a href="//imgur.com/a/53BYVf9"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<img src="images/invaders.gif" alt="Space Invaders Gameplay" width="...">  <!-- Add a suitable width -->
+
+
+This project recreates the classic arcade game Space Invaders using Go and the Ebiten game library. It's a simplified version, focusing on core gameplay elements like alien movement, laser fire, and collision detection. The project demonstrates 2D game development principles in Go, showcasing sprite animation, game loops, and basic input handling. No external game engine is used; the game is built directly using Ebiten's drawing and input functions for a minimalist and educational approach. It leverages Go's concurrency features (goroutines) for handling user input and game logic simultaneously. This project also serves as a modern homage to the golden age of arcade games, offering a fun and nostalgic coding exercise for those new to Go and game development.
 
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/davidtkeane/invaders?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/invaders?style=flat-square)
+![Go Version](https://img.shields.io/github/go-mod/go-version/davidtkeane/invaders)
 
 
 <img align="left" height="220" src="https://i.imgur.com/JsNXH2T.jpeg"/>
 
 ```diff
-@@ Student of Learning @@
+@@ David T Keane 🧠 @@
 
-- live in Dublin, IRE
-! tea drinker, Applied Psychologist, UX/UI Designer
-! WordPress, HTML, Python, Bash Scripts
+- lives in Dublin, IRE.
++ Creator of h3llcoin - Solana
+
+! 💥 Tea Drinker, Applied Psychologist, UX/UI Designer
+! 💯 WordPress, HTML, Python, GO, Bash Scripts
+
 # 📖 kali linux - macOS - Windows
-+ Creator of h3llcoin - solana blockchain
-# 📖 https://davidtkeane.com/ 📖 https://icanhelp.ie/ 
-# 📖 https://forgiveme.life/ 
+# 📖 https://davidtkeane.com/ 📖 https://icanhelp.ie/  📖 https://forgiveme.life/ 
 ```
 
 ## Installation
