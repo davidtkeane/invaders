@@ -1,37 +1,48 @@
-<h1 align="center">Hi, guys! <img src="https://imgur.com/a/53BYVf9" width="28px" alt=""></h1>
+<h1 align="center">Space Invaders</h1">
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/53BYVf9" data-context="false" ><a href="//imgur.com/a/53BYVf9"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-<img src="images/invaders.gif" alt="Space Invaders Gameplay" width="...">  <!-- Add a suitable width -->
+<h2 align="center"><img src="https://camo.githubusercontent.com/33fc802b38252c211851cc922f01bad895d203ece43756c966c98c49ebc21594/68747470733a2f2f636f756e742e6765746c6f6c692e636f6d2f6765742f4066756a697761726163686f6b693f7468656d653d61736f756c"></h2>
 
 
-This project recreates the classic arcade game Space Invaders using Go and the Ebiten game library. It's a simplified version, focusing on core gameplay elements like alien movement, laser fire, and collision detection. The project demonstrates 2D game development principles in Go, showcasing sprite animation, game loops, and basic input handling. No external game engine is used; the game is built directly using Ebiten's drawing and input functions for a minimalist and educational approach. It leverages Go's concurrency features (goroutines) for handling user input and game logic simultaneously. This project also serves as a modern homage to the golden age of arcade games, offering a fun and nostalgic coding exercise for those new to Go and game development.
+## Personal Note 
 
+<img src="https://camo.githubusercontent.com/b199fabd947beb75a0113cae47b1dd8d1c8be22cd4802cd24b1c8863a4533e3f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6d6164655f776974682d2545322539442541342d7265643f7374796c653d666f722d7468652d6261646765266c6162656c436f6c6f723d6f72616e6765">
+
+I wanted to play a game of space invaders and I started to code, then I remembered Github and I did a quick search and found the repo [Space Invaders Game](https://github.com/sausheong/invaders) by [sausheong](https://github.com/sausheong/invaders) which my version of the game is based on. It is written in Go language and I loved it. So I asked Gemini to help add sounds, a background image, to add more lives, to save the games highscores. I tried to make it feel more like an arcade machine with the end game sounds and music, with the flashing scoreboard. And two install scripts, one to download a github repo and install everything for you, the 2nd is install Go script that will install Go if it is not installed, then the script will install the dependencies needed for the game. 
+
+A big thank you @ [sausheong](https://github.com/sausheong/invaders) for giving me a platform to learn and play with. 
+
+Please find [sausheong](https://github.com/sausheong/invaders) instructions and how [sausheong](https://github.com/sausheong/invaders) made the game below the updated README. I have added <-----> to separate both README.md files. 
+
+Thank you and take care. 
+
+<h1 align="left">Hello There! and Welcome to My Version of Invaders <img src="https://i.imgur.com/8tT5L21.gif" width="28px" alt="🤙"></h1>
+
+## About
+
+This project recreates the classic arcade game Space Invaders using Go and the Ebiten game library. It's a simplified version, focusing on core game play elements like alien movement, laser fire, and collision detection. The project demonstrates 2D game development principles in Go, showcasing sprite animation, game loops, and basic input handling. No external game engine is used; the game is built directly using Ebiten's drawing and input functions for a minimalist and educational approach. It leverages Go's concurrency features (goroutines) for handling user input and game logic simultaneously. This project also serves as a modern homage to the golden age of arcade games, offering a fun and nostalgic coding exercise for those new to Go and game development.
+
+## <h2 align="left">🤙 Space Invaders Main Screen></h2>
+
+<a href="https://i.imgur.com/x3SLXY5.png"><img src="https://i.imgur.com/x3SLXY5.png" alt="Space Invaders Screenshot" width="50%"></a>
+
+## <h2 align="left">🤙 Space Invaders End-Game Screen</h2>
+
+<a href="https://i.imgur.com/aDKAPKS.png"><img src="https://i.imgur.com/aDKAPKS.png" alt="End Game Screen" width="50%"  align="center" ></a>
+
+
+## Installation
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/davidtkeane/invaders?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/invaders?style=flat-square)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/davidtkeane/invaders)
 
-
-<img align="left" height="220" src="https://i.imgur.com/JsNXH2T.jpeg"/>
-
-```diff
-@@ David T Keane 🧠 @@
-
-- lives in Dublin, IRE.
-+ Creator of h3llcoin - Solana
-
-! 💥 Tea Drinker, Applied Psychologist, UX/UI Designer
-! 💯 WordPress, HTML, Python, GO, Bash Scripts
-
-# 📖 kali linux - macOS - Windows
-# 📖 https://davidtkeane.com/ 📖 https://icanhelp.ie/  📖 https://forgiveme.life/ 
-```
-
-## Installation
-
 ### Method 1: Using `install_go.sh` (Recommended)
 
 1.  **Download:** Download the `install_go.sh` script and the game files to your computer.
+
+	```git
+	git clone https://github.com/davidtkeane/invaders.git
+	```
 
 2.  **Make Executable:** Open a terminal and navigate to the directory where you downloaded the files. Run the following command to make the script executable:
 
@@ -129,7 +140,11 @@ invaders/
 ├── go.sum                 # Go module checksum file
 └── main.go                # Main Go source file
 ```
+End of Rangers README.md. 
+
 <----->
+The Start of Space Invaders by [sausheong](https://github.com/sausheong/invaders)
+
 # Writing Space Invaders with Go
 
 The earliest memory I had of arcade video games was watching my older brother and cousins going at the video game machines at Genting Highlands. While our parents were at the other types of games Genting Highlands was more popularly known for, we were generally let loose to play arcade games to our hearts' content. 
@@ -348,7 +363,7 @@ for i := aliensStartCol; i < aliensStartCol+(30*aliensPerRow); i += alienSize {
 
 ## Game loop
 
-Now that we've laid the groundwork, let's get into the main game loop. Most games run in a what is commonly called a [game loop](http://gameprogrammingpatterns.com/game-loop.html). A game loop is a game software development pattern that is often the heart of a game. It's an infinite loop that updates and redraws to animate gameplay. In our Space Invaders game loop we use a variable named `gameOver` to indicate that the loop should continue until the game ends (either triggered by the player or when the aliens win).
+Now that we've laid the groundwork, let's get into the main game loop. Most games run in a what is commonly called a [game loop](http://gameprogrammingpatterns.com/game-loop.html). A game loop is a game software development pattern that is often the heart of a game. It's an infinite loop that updates and redraws to animate game play. In our Space Invaders game loop we use a variable named `gameOver` to indicate that the loop should continue until the game ends (either triggered by the player or when the aliens win).
 
 The game loop is rather long so we'll break it up into a few parts. Let's look at the first part, which is used to capture the keyboard events from the player.
 
@@ -427,7 +442,7 @@ for i := 0; i < len(aliens); i++ {
 
 To determine where the aliens should be going, we multiply the horizontal (X) position of the alien with the variable `alienDirection`. 
 
-We also use the `Status` of the alien to determine if it's alive or dead. If it's alive, we check if it has collided with a laser beam. If yes, it's dead. We draw the explosion sprite, set the `Status` to false, rack up the player points and reset the laser beam. Reseting the laser beam just means we set the beam's `Status` back to `false` and place it at the vertical (Y) level the same as the cannon.
+We also use the `Status` of the alien to determine if it's alive or dead. If it's alive, we check if it has collided with a laser beam. If yes, it's dead. We draw the explosion sprite, set the `Status` to false, rack up the player points and reset the laser beam. Resetting the laser beam just means we set the beam's `Status` back to `false` and place it at the vertical (Y) level the same as the cannon.
 
 ```go
 func resetBeam() {
