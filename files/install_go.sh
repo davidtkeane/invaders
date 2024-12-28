@@ -36,7 +36,7 @@ command_exists() {
 # --- Function to install Go ---
 install_go() {
   echo -e "${YELLOW}------------------------------------------------${NC}"
-  echo -e "${BLUE}Go is not installed. Attempting to install...${NC}"
+  echo -e "${BLUE} Go is not installed. Attempting to install...${NC}"
   echo -e "${YELLOW}------------------------------------------------${NC}"
   
 
@@ -121,27 +121,30 @@ echo -e "${GREEN}$LOGO${NC}"
 if ! command_exists go; then
     install_go
 fi
- echo -e "${GREEN}------------------------------------------------${NC}"
- echo -e "${BLUE}Installing required packages...${NC}"
- echo -e "${GREEN}------------------------------------------------${NC}"
 
-# Install dependencies
+# -------------------------- CRUCIAL CHANGE --------------------------
+# Change to the project root directory
+cd "$(dirname "$0")/.."  # Goes up one directory from the script's location
+
+echo -e "${GREEN}------------------------------------------------${NC}"
+echo -e "${BLUE}Installing required packages...${NC}"
+echo -e "${GREEN}------------------------------------------------${NC}"
+
+# Initialize the module (CRUCIAL - use the correct module path)
+go mod init github.com/davidtkeane/invaders # Or your actual repo URL
+
+# Tidy up the modules (This handles dependency installation)
 go mod tidy
-go mod download golang.org/x/image
-go mod init space_invaders
 
-go get github.com/golang/freetype/truetype
-go get github.com/hajimehoshi/ebiten/v2
-go get github.com/disintegration/gift github.com/nsf/termbox-go
-go get github.com/hajimehoshi/ebiten/v2/audio/mp3@v2.8.6
-go get github.com/hajimehoshi/ebiten/v2/audio@v2.8.6
-
+# Get all packages in current project (Installs dependencies and updates go.mod)
+go get ./... # Now works correctly because we're in the project root
 
 echo -e "${GREEN}------------------------------------------------${NC}"
 echo -e "${BLUE}All required packages and dependencies have been installed.${NC}"
 echo -e "${BLUE}You can now run the game by typing:${NC}"
-echo -e "${YELLOW}go run ./text.go${NC}"
+echo -e "${YELLOW}go run .${NC}" # Correct command to run the main package
 echo -e "${GREEN}------------------------------------------------${NC}"
+
 
 # Run the Game
 read -p "Do you want to run the game now? 🍺 [y/N] " -n 1 -r
