@@ -11,7 +11,8 @@ I wanted to play a game of space invaders and I started to code, then I remember
 
 A big thank you @ [sausheong](https://github.com/sausheong/invaders) for giving me a platform to learn and play with. 
 
-Please find [sausheong](https://github.com/sausheong/invaders) instructions and how [sausheong](https://github.com/sausheong/invaders) made the game below the updated README. I have added <-----> to separate both README.md files. 
+Please find [sausheong](https://github.com/sausheong/invaders) instructions and how [sausheong](https://github.com/sausheong/invaders) made the game below the updated README. <br>
+I have added <-----> to separate both README.md files. 
 
 Thank you and take care. 
 
