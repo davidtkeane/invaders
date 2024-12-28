@@ -2,9 +2,9 @@
 
 This Python script is for a voice interface chatbot named Jervis. It uses OpenAI's GPT-3.5-turbo-instruct model to respond to user input. The user can interact with the chatbot through speech, and the chatbot responds with text and/or speech. The conversation can be saved as an MP3 file and emailed to a specified address. The conversation is also logged to a MongoDB database.
 
-![PowerShell](https://img.shields.io/badge/-PowerShell-black?style=flat-square&logo=powershell)
-![GitHub last commit](https://img.shields.io/github/last-commit/davidtkeane/jervis-ChatGPT?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/jervis-ChatGPT?style=flat-square)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/davidtkeane/invaders?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/invaders?style=flat-square)
 
 
 <img align="left" height="220" src="https://i.imgur.com/JsNXH2T.jpeg"/>
