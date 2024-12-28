@@ -21,7 +21,11 @@ Thank you and take care.
 
 This project recreates the classic arcade game Space Invaders using Go and the Ebiten game library. It's a simplified version, focusing on core game play elements like alien movement, laser fire, and collision detection. The project demonstrates 2D game development principles in Go, showcasing sprite animation, game loops, and basic input handling. No external game engine is used; the game is built directly using Ebiten's drawing and input functions for a minimalist and educational approach. It leverages Go's concurrency features (goroutines) for handling user input and game logic simultaneously. This project also serves as a modern homage to the golden age of arcade games, offering a fun and nostalgic coding exercise for those new to Go and game development.
 
-## <h2 align="left">🤙 Space Invaders Main Screen></h2>
+![GitHub followers](https://img.shields.io/github/followers/davidtkeane)
+![GitHub User's stars](https://img.shields.io/github/stars/davidtkeane)
+<br>
+
+## <h2 align="left">🤙 Space Invaders Main Screen>/h2>
 
 <a href="https://i.imgur.com/x3SLXY5.png"><img src="https://i.imgur.com/x3SLXY5.png" alt="Space Invaders Screenshot" width="50%"></a>
 
@@ -35,6 +39,8 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 ![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/invaders?style=flat-square)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/davidtkeane/invaders)
 ![GitHub commit status](https://img.shields.io/github/checks-status/davidtkeane/invaders/c4fabaedaf92e7821514903768518b03ff2e297a)
+<br>
+
 <br>
 
 ### Method 1: Using `install_go.sh` (Recommended)
