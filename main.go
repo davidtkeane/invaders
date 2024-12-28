@@ -1,6 +1,6 @@
 package main
 
-// Version 6
+// Version 6.0
 // Invaders forked from https://github.com/sausheong/invaders
 // Modified by RangerSmyth & David T Keane
 // Date: 27-28th December 2024
