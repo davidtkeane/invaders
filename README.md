@@ -29,12 +29,13 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 
 <a href="https://i.imgur.com/aDKAPKS.png"><img src="https://i.imgur.com/aDKAPKS.png" alt="End Game Screen" width="50%"  align="center" ></a>
 
-
 ## Installation
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/davidtkeane/invaders?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/invaders?style=flat-square)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/davidtkeane/invaders)
+![GitHub commit status](https://img.shields.io/github/checks-status/davidtkeane/invaders/c4fabaedaf92e7821514903768518b03ff2e297a)
+<br>
 
 ### Method 1: Using `install_go.sh` (Recommended)
 
@@ -161,6 +162,11 @@ invaders/
 
 5 directories, 23 files
 ```
+<br>
+![Keybase PGP](https://img.shields.io/keybase/pgp/davidtkeane)
+![Keybase BTC](https://img.shields.io/keybase/btc/davidtkeane)
+
+
 End of Rangers README.md. 
 
 <----->
