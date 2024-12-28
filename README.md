@@ -43,6 +43,8 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 	```git
 	git clone https://github.com/davidtkeane/invaders.git
 	```
+	**Enter Folder:** Enter the files folder and then move to number 2.
+
 	```bash
 	cd invaders/files
 	```
@@ -59,6 +61,14 @@ This project recreates the classic arcade game Space Invaders using Go and the E
     ./install_go.sh
     ```
 
+	**The script after installing will then ask if you want to play invaders:**
+
+	If you say no and want to run the script from the command line use this command:
+
+	```bash
+	go run main.go
+	```
+	<br>
     The script will perform the following actions:
 
     -   Check if Go is already installed on your system.
@@ -120,28 +130,36 @@ go run main.go
 $ tree
 
 invaders/
-|
+.
+├── README.md
 ├── files/
-│   ├── background.wav     # Background music
-│   ├── end-game.mp3       # Game over music
-│   ├── explosion.wav      # Explosion sound effect
-│   ├── explosion-sound.mp3# Explosion sound effect
-│   ├── game-over.mp3      # Game over sound effect
-│   ├── girlfriend.txt     # Text file (Easter egg message)
-│   ├── highscores.txt     # High scores data
-│   ├── install_go.sh      # Installation script (Bash)
-│   └── laser.wav          # Laser sound effect
+│   ├── background.wav      # Background music
+│   ├── end-game.mp3        # Game over music
+│   ├── explosion.wav       # Explosion sound effect
+│   ├── explosion-sound.mp3 # Explosion sound effect
+│   ├── game-over.mp3       # Game over sound effect
+│   ├── girlfriend.txt      # Text file (Easter egg message)
+│   ├── highscores.txt      # High scores data
+│   ├── install_go.sh       # Installation script (Bash)
+│   └── laser.wav           # Laser sound effect
 ├── font/
-│   └── font.ttf           # Font file for text
+│   └── font.ttf            # Font file for text
+├── go.mod                  # Go module file
+├── go.sum                  # Go module checksum file
+├── images
+│   ├── collision.png
+│   ├── invaders.gif
+│   ├── space-invaders.png
+│   ├── sprites-position.png
+│   └── sprites.png
 ├── imgs/
-│   ├── background-end3.png# Scaled-down version of background-end3.jpg 
-│   ├── background-end3.jpg# Game over background image
-│   ├── bg.png             # Background image
-│   ├── sprites.png        # Spritesheet image
-│   └── start.png          # Start screen image
-├── go.mod                 # Go module file
-├── go.sum                 # Go module checksum file
-└── main.go                # Main Go source file
+│   ├── background-end3.jpg # Game over background image
+│   ├── bg.png              # Background image
+│   ├── sprites.png         # Spritesheet image
+│   └── start.png           # Start screen image
+└── main.go                 # Main Go source file
+
+5 directories, 23 files
 ```
 End of Rangers README.md. 
 
