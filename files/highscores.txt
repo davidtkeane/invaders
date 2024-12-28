@@ -1,0 +1,5 @@
+ranger,880
+ranger,750
+ranger,610
+ranger,480
+ranger,460
