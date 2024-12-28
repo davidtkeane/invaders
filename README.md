@@ -1,34 +1,16 @@
-> tree
-.
-├── README.md
-├── files
-│   ├── background.wav
-│   ├── end-game.mp3
-│   ├── explosion.wav
-│   ├── game-over.mp3
-│   ├── girlfriend.txt
-│   ├── highscores.txt
-│   ├── install_github.sh
-│   ├── install_go.sh
-│   └── laser.wav
-├── font
-│   └── font.ttf
-├── go.mod
-├── go.sum
-├── images
-│   ├── collision.png
-│   ├── invaders.gif
-│   ├── space-invaders.png
-│   ├── sprites-position.png
-│   └── sprites.png
-├── imgs
-│   ├── background-end3.png
-│   ├── bg.png
-│   ├── sprites.png
-│   └── start.png
-└── main.go
+<img align="left" height="220" src="https://i.imgur.com/JsNXH2T.jpeg"/>
 
-5 directories, 23 files
+```diff
+@@ Student of Learning @@
+
+- live in Dublin, IRE
+! tea drinker, Applied Psychologist, UX/UI Designer
+! WordPress, HTML, Python, Bash Scripts
+# 📖 kali linux - macOS - Windows
++ Creator of h3llcoin - solana blockchain
+# 📖 https://davidtkeane.com/ 📖 https://icanhelp.ie/ 
+# 📖 https://forgiveme.life/ 
+```
 
 # Writing Space Invaders with Go
 
