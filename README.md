@@ -12,6 +12,107 @@
 # 📖 https://forgiveme.life/ 
 ```
 
+## Installation
+
+### Method 1: Using `install_go.sh` (Recommended)
+
+1.  **Download:** Download the `install_go.sh` script and the game files to your computer.
+
+2.  **Make Executable:** Open a terminal and navigate to the directory where you downloaded the files. Run the following command to make the script executable:
+
+    ```bash
+    chmod +x install_go.sh
+    ```
+
+3.  **Run the Script:** Execute the script with the following command:
+
+    ```bash
+    ./install_go.sh
+    ```
+
+    The script will perform the following actions:
+
+    -   Check if Go is already installed on your system.
+    -   If Go is not installed:
+        -   Attempt to automatically download and install Go version 1.21.5 (you can modify this in the script if needed).
+        -   Verify the SHA256 checksum of the downloaded Go archive for security.
+        -   Extract the Go archive to `/usr/local`.
+        -   Temporarily add Go to your `PATH` for the current terminal session.
+        -   Print instructions on how to make the `PATH` change permanent (so you can use Go in any terminal session).
+        -   Test the Go installation by printing the version.
+    -   Install the necessary Go packages for the game using `go mod tidy`, `go mod download`, and `go get`.
+    -   Prompt you whether you want to run the game immediately.
+
+### Method 2: Manual Installation
+
+1.  **Install Go:**
+
+    -   If you don't have Go installed, go to the official Go website: [https://go.dev/doc/install](https://go.dev/doc/install)
+    -   Download the Go installer for your operating system (macOS, Windows, or Linux).
+    -   Run the installer and follow the on-screen instructions.
+    -   **Important:** Make sure that the Go `bin` directory (e.g., `/usr/local/go/bin` or `C:\Go\bin`) is added to your system's `PATH` environment variable. This allows you to run Go commands from any terminal location. You might need to restart your terminal or even your computer for the `PATH` changes to take effect.
+    -   **Verify Installation:** Open a terminal and run `go version`. You should see the installed Go version printed.
+
+2.  **Download Game Files:**
+
+    -   Download the `main.go` file, the `install_go.sh` script and all the asset files (images, audio files, font file) from the game's repository.
+    -   Organize the files into the correct directory structure as shown in the "Folder Structure" section below.
+
+3.  **Install Dependencies:**
+
+    -   Open a terminal and navigate to the directory where you saved the game files (the directory containing `main.go`).
+    -   Run the following commands in order:
+        -   `go mod init example.com/spaceinvaders`: Initializes a new Go module named `example.com/spaceinvaders`. You can choose a different module name if you want. This command creates a `go.mod` file, which is used to track project dependencies.
+        -   `go mod tidy`: This is a very important command. It analyzes your code, finds all the required packages (like Ebiten and other libraries), and automatically adds them to your `go.mod` file. It also downloads the packages and their dependencies into a cache directory (usually `$GOPATH/pkg/mod`).
+        -   `go mod download golang.org/x/image`: Downloads the `golang.org/x/image` package, which is needed for image handling.
+        -   `go get github.com/golang/freetype/truetype`: Downloads the `truetype` package for font handling.
+        -   `go get github.com/hajimehoshi/ebiten/v2`: Downloads the Ebiten game library.
+        -   `go get github.com/hajimehoshi/ebiten/v2/audio`: Downloads the Ebiten audio package.
+        -   `go get github.com/hajimehoshi/ebiten/v2/audio/wav`: Downloads the Ebiten WAV audio decoder.
+        -   `go get github.com/hajimehoshi/ebiten/v2/audio/mp3`: Downloads the Ebiten MP3 audio decoder.
+        -   `go get github.com/hajimehoshi/ebiten/v2/ebitenutil`: Downloads Ebiten utilities.
+        -   `go get github.com/hajimehoshi/ebiten/v2/inpututil`: Downloads Ebiten input utilities.
+        -   `go get github.com/hajimehoshi/ebiten/v2/text`: Downloads Ebiten text rendering utilities.
+        -   `go get golang.org/x/image/font`: Downloads the font package.
+
+        - **Note:** The `go get` commands will download the specified packages and their dependencies to your Go workspace (`$GOPATH/pkg/mod`). These packages are not directly placed in your project folder. The `go.mod` and `go.sum` files keep track of the exact versions used in your project. 
+
+## Running the Game
+
+Once you have installed the game using either method, you can run it with the following command in the terminal:
+
+```bash
+go run main.go
+```
+
+## Tree
+
+invaders/
+|
+├── files/
+│   ├── background.wav     # Background music
+│   ├── end-game.mp3       # Game over music
+│   ├── explosion.wav      # Explosion sound effect
+│   ├── explosion-sound.mp3# Explosion sound effect
+│   ├── game-over.mp3      # Game over sound effect
+│   ├── girlfriend.txt     # Text file (Easter egg message)
+│   ├── highscores.txt     # High scores data
+│   ├── install_go.sh      # Installation script (Bash)
+│   └── laser.wav          # Laser sound effect
+├── font/
+│   └── font.ttf           # Font file for text
+├── imgs/
+│   ├── background-end3.png# Scaled-down version of background-end3.jpg 
+│   ├── background-end3.jpg# Game over background image
+│   ├── bg.png             # Background image
+│   ├── sprites.png        # Spritesheet image
+│   └── start.png          # Start screen image
+├── go.mod                 # Go module file
+├── go.sum                 # Go module checksum file
+└── main.go                # Main Go source file
+
+
+<----->
 # Writing Space Invaders with Go
 
 The earliest memory I had of arcade video games was watching my older brother and cousins going at the video game machines at Genting Highlands. While our parents were at the other types of games Genting Highlands was more popularly known for, we were generally let loose to play arcade games to our hearts' content. 
