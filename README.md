@@ -1,3 +1,35 @@
+> tree
+.
+├── README.md
+├── files
+│   ├── background.wav
+│   ├── end-game.mp3
+│   ├── explosion.wav
+│   ├── game-over.mp3
+│   ├── girlfriend.txt
+│   ├── highscores.txt
+│   ├── install_github.sh
+│   ├── install_go.sh
+│   └── laser.wav
+├── font
+│   └── font.ttf
+├── go.mod
+├── go.sum
+├── images
+│   ├── collision.png
+│   ├── invaders.gif
+│   ├── space-invaders.png
+│   ├── sprites-position.png
+│   └── sprites.png
+├── imgs
+│   ├── background-end3.png
+│   ├── bg.png
+│   ├── sprites.png
+│   └── start.png
+└── main.go
+
+5 directories, 23 files
+
 # Writing Space Invaders with Go
 
 The earliest memory I had of arcade video games was watching my older brother and cousins going at the video game machines at Genting Highlands. While our parents were at the other types of games Genting Highlands was more popularly known for, we were generally let loose to play arcade games to our hearts' content. 

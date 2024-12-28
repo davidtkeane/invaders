@@ -2,6 +2,78 @@ package main
 
 // Version 6
 
+/*
+------------------------- HELP SECTION (CONFIGURATION) -------------------------
+
+    Game Settings:
+
+    - windowWidth, windowHeight: Adjust the dimensions of the game window.
+    - aliensPerRow: Set the number of aliens per row.
+    - aliensStartCol: Set the starting column position for aliens.
+    - alienSize: Adjust the size of the alien sprites.
+    - bombProbability: Modify the probability of aliens dropping bombs (0.0 to 1.0).
+    - bombSpeed: Change the speed at which bombs fall.
+    - barrierYPosition: Adjust the vertical position of the barriers.
+    - playerYPosition: Set the initial vertical position of the player's cannon.
+
+    Audio Settings:
+
+    - You can adjust the volume of each sound effect by modifying the volume
+      when creating the audio player in the loadAudio function.
+      Example:
+          audioStream, err := audioContext.NewPlayer(wavStream)
+          audioStream.SetVolume(0.5) // Sets volume to 50%
+      The volume parameter is a float64 between 0.0 (silent) and 1.0 (full volume).
+
+    Control Settings:
+
+    - The game controls are currently hardcoded in the Update() function.
+    - To change the controls, modify the ebiten.IsKeyPressed() and
+      inpututil.IsKeyJustPressed() functions within Update().
+      For example, to change the key for moving the cannon to the right:
+          if ebiten.IsKeyPressed(ebiten.KeyD) { // Change from KeyArrowRight to KeyD
+              laserCannon.Position.X += 10
+          }
+
+    Adding a Settings Panel:
+
+    - To add a settings panel that can be opened/closed with a button:
+      1. Create a new struct for managing settings.
+      2. Implement drawing functions for the panel.
+      3. Add a button to toggle the panel in the main game's Draw() function.
+      4. Handle input for the settings panel in the Update() function.
+
+    Using a Switch Statement (Illustrative Example):
+
+    - Go does not have a traditional switch statement for types like in C++ or Java.
+    - You can use a type switch or a series of if-else statements for similar functionality.
+      Example (Type Switch):
+          switch v := someVariable.(type) {
+          case int:
+              fmt.Println("Integer:", v)
+          case string:
+              fmt.Println("String:", v)
+          default:
+              fmt.Println("Unknown Type")
+          }
+      Example (If-Else):
+          if someVariable == "option1" {
+              // Do something
+          } else if someVariable == "option2" {
+              // Do something else
+          }
+
+    Managing Multiple Changes and Ideas:
+
+    - It's recommended to use a version control system like Git to manage changes.
+    - Break down each change or idea into smaller, manageable tasks.
+    - Use comments and documentation to keep track of changes and future plans.
+    - Consider creating separate Go files for different parts of the game (e.g., settings, UI, game logic)
+      to improve organization and readability.
+
+--------------------------------------------------------------------------------
+*/
+
 import (
 	"bytes"
 	"fmt"
@@ -313,6 +385,16 @@ func addHighScore(score int) {
 	sortHighScores()
 	saveHighScores()
 }
+
+//   This is the end of Part 1
+
+//   Part 1 Summary:
+//   This part of the code sets up the game environment, including:
+// - Importing necessary packages for game development, audio handling, and file operations.
+// - Defining game parameters such as window dimensions, alien configurations, and game over screen settings.
+// - Initializing sprites, which are the visual elements of the game like aliens, the player's cannon, and
+
+// This is the Start of Part 2
 
 type Game struct { // Main Game struct — add fields here!
 	loop             int
@@ -667,9 +749,20 @@ func (g *Game) resetGame() {
 	}
 }
 
-// End of Part 2
+// 	 End of Part 2
 
-// This is the Start of Part 3
+// 	 Part 2 Summary:
+
+//   This section defines the core game logic and rendering functions. Key components include:
+// - Game struct: Holds the game state variables like score, lives, and game loop counter.
+// - Update() function: Handles game logic updates, including player input, alien movement, and game over conditions.
+// - drawGameOverScreen() function: Renders the game over screen with the final score, high scores, and options to restart or quit.
+// - Draw() function: The main rendering function that calls either drawGameOverScreen() or drawGameScreen() based on the game state.
+// - drawGameScreen() function: Renders the game elements like the background, barriers, aliens, bombs, laser cannon, and beam.
+// - Layout() function: Defines the game's screen layout.
+// - Helper functions: Include collision detection (collide), bomb dropping (dropBomb), beam resetting (resetBeam), and game reset (resetGame).
+
+// 	 This is the Start of Part 3
 
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
