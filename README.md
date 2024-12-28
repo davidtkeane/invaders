@@ -2,7 +2,6 @@
 
 <h2 align="center"><img src="https://camo.githubusercontent.com/33fc802b38252c211851cc922f01bad895d203ece43756c966c98c49ebc21594/68747470733a2f2f636f756e742e6765746c6f6c692e636f6d2f6765742f4066756a697761726163686f6b693f7468656d653d61736f756c"></h2>
 
-
 ## Personal Note 
 
 <img src="https://camo.githubusercontent.com/b199fabd947beb75a0113cae47b1dd8d1c8be22cd4802cd24b1c8863a4533e3f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6d6164655f776974682d2545322539442541342d7265643f7374796c653d666f722d7468652d6261646765266c6162656c436f6c6f723d6f72616e6765">
@@ -43,6 +42,9 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 
 	```git
 	git clone https://github.com/davidtkeane/invaders.git
+	```
+	```bash
+	cd invaders/files
 	```
 
 2.  **Make Executable:** Open a terminal and navigate to the directory where you downloaded the files. Run the following command to make the script executable:
