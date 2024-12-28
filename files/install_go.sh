@@ -152,7 +152,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     echo "Running the game....🍺 "
-    go run ./text.go
+    go run ./main.go
     echo "Thank you for playing!" # This will always print after the game finishes.
 else
     echo ""
