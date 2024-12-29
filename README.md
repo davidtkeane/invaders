@@ -1,35 +1,64 @@
-<h1 align="center">Space Invaders</h1">
+# <h1 align="center">👾 Space Invaders 🚀</h1>
+
 
 <h2 align="center"><img src="https://camo.githubusercontent.com/33fc802b38252c211851cc922f01bad895d203ece43756c966c98c49ebc21594/68747470733a2f2f636f756e742e6765746c6f6c692e636f6d2f6765742f4066756a697761726163686f6b693f7468656d653d61736f756c"></h2>
 
-## Personal Note 
+## Table of Contents
 
-<img src="https://camo.githubusercontent.com/b199fabd947beb75a0113cae47b1dd8d1c8be22cd4802cd24b1c8863a4533e3f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6d6164655f776974682d2545322539442541342d7265643f7374796c653d666f722d7468652d6261646765266c6162656c436f6c6f723d6f72616e6765">
+-   [Features](#features)
+-   [Personal Note](#personal-note)
+-   [About](#about)
+-   [Screenshots](#screenshots)
+-   [Installation](#installation)
+    -   [Method 1: Using `install_go.sh` (Recommended)](#method-1-using-install_gosh-recommended)
+    -   [Method 2: Manual Installation](#method-2-manual-installation)
+-   [Running the Game](#running-the-game)
+-   [Folder Structure](#folder-structure)
+-   [Gameplay](#gameplay)
+-   [Configuration](#configuration)
+-   [Acknowledgments](#acknowledgments)
+-   [Contributing](#contributing)
+-   [License](#license)
+-   [Space-Invaders](#space-invaders)
 
-I wanted to play a game of space invaders and I started to code, then I remembered Github and I did a quick search and found the repo [Space Invaders Game](https://github.com/sausheong/invaders) by [sausheong](https://github.com/sausheong/invaders) which my version of the game is based on. It is written in Go language and I loved it. So I asked Gemini to help add sounds, a background image, to add more lives, to save the games highscores. I tried to make it feel more like an arcade machine with the end game sounds and music, with the flashing scoreboard. And two install scripts, one to download a github repo and install everything for you, the 2nd is install Go script that will install Go if it is not installed, then the script will install the dependencies needed for the game. 
+## Features
 
-A big thank you @ [sausheong](https://github.com/sausheong/invaders) for giving me a platform to learn and play with. 
+-   Classic Space Invaders gameplay.
+-   Multiple alien types with different behaviors.
+-   Player-controlled laser cannon with shooting.
+-   Destructible barriers.
+-   Sound effects for laser fire, explosions, and game over.
+-   Background music during gameplay.
+-   High score tracking (top 5 scores).
+-   Game over screen with final score and high scores display.
+-   Option to restart the game or exit.
 
-Please find [sausheong](https://github.com/sausheong/invaders) instructions and how [sausheong](https://github.com/sausheong/invaders) made the game below the updated README. <br>
-I have added <-----> to separate both README.md files. 
+## Personal Note
 
-Thank you and take care. 
+<img src="https://camo.githubusercontent.com/b199fabd947beb75a0113cae47b1dd8d1c8be22cd4802cd24b1c8863a4533e3f/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6d6164655f776974682d2545322539442541342d7265643f7374796c653d666f722d7468652d6261646765266c6162656c436f6c6f723d6f72616e6765" alt="Made with ❤️">
 
-<h1 align="left">Hello There! and Welcome to My Version of Invaders <img src="https://i.imgur.com/8tT5L21.gif" width="28px" alt="🤙"></h1>
+I wanted to play a game of Space Invaders and I started to code, then I remembered GitHub and I did a quick search and found the repo [Space Invaders Game](https://github.com/sausheong/invaders) by [sausheong](https://github.com/sausheong). It is written in Go language and I loved it. So, I asked an AI Chatbot to help add sounds, a background image, to add more lives, and to save the game's high scores. I tried to make it feel more like an arcade machine with the end game sounds and music, with the flashing scoreboard. Two install scripts were created, one to download a GitHub repo and install everything for you, the 2nd is an install Go script that will install Go if it is not installed, then the script will install the dependencies needed for the game.
+
+A big thank you to [sausheong](https://github.com/sausheong) for giving me a platform to learn and play with.
+
+Please find [sausheong](https://github.com/sausheong)'s instructions and how [sausheong](https://github.com/sausheong) made the game below the updated `README.md`. <br>
+I have added ` <---> ` to separate both `README.md` files.
+
+Thank you and take care.
 
 ## About
 
-This project recreates the classic arcade game Space Invaders using Go and the Ebiten game library. It's a simplified version, focusing on core game play elements like alien movement, laser fire, and collision detection. The project demonstrates 2D game development principles in Go, showcasing sprite animation, game loops, and basic input handling. No external game engine is used; the game is built directly using Ebiten's drawing and input functions for a minimalist and educational approach. It leverages Go's concurrency features (goroutines) for handling user input and game logic simultaneously. This project also serves as a modern homage to the golden age of arcade games, offering a fun and nostalgic coding exercise for those new to Go and game development.
+<h1 align="left">Hello There! and Welcome to My Version of Invaders <img src="https://i.imgur.com/8tT5L21.gif" width="28px" alt="🤙"></h1>
 
-![GitHub followers](https://img.shields.io/github/followers/davidtkeane)
-![GitHub User's stars](https://img.shields.io/github/stars/davidtkeane)
-<br>
+This project recreates the classic arcade game Space Invaders using Go and the Ebiten game library. It's a simplified version, focusing on core gameplay elements like alien movement, laser fire, and collision detection. The project demonstrates 2D game development principles in Go, showcasing sprite animation, game loops, and basic input handling. No external game engine is used; the game is built directly using Ebiten's drawing and input functions for a minimalist and educational approach. It leverages Go's concurrency features (goroutines) for handling user input and game logic simultaneously. This project also serves as a modern homage to the golden age of arcade games, offering a fun and nostalgic coding exercise for those new to Go and game development.
 
-## <h2 align="left">🤙 Space Invaders Main Screen</h2>
+## Screenshots
+
+<h2 align="left">🤙 Space Invaders Main Screen</h2>
 
 <a href="https://i.imgur.com/x3SLXY5.png"><img src="https://i.imgur.com/x3SLXY5.png" alt="Space Invaders Screenshot" width="50%"></a>
 
-## <h2 align="left">🤙 Space Invaders End-Game Screen</h2>
+<h2 align="left">🤙 Space Invaders End-Game Screen</h2>
 
 <a href="https://i.imgur.com/aDKAPKS.png"><img src="https://i.imgur.com/aDKAPKS.png" alt="End Game Screen" width="50%"  align="center" ></a>
 
@@ -39,22 +68,21 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 ![GitHub issues](https://img.shields.io/github/issues-raw/davidtkeane/invaders?style=flat-square)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/davidtkeane/invaders)
 ![GitHub commit status](https://img.shields.io/github/checks-status/davidtkeane/invaders/c4fabaedaf92e7821514903768518b03ff2e297a)
-<br>
-
-<br>
+![GitHub Sponsors](https://img.shields.io/github/sponsors/davidtkeane)
 
 ### Method 1: Using `install_go.sh` (Recommended)
 
-1.  **Download:** Download the `install_go.sh` script and the game files to your computer.
+1.  **Download:** Clone the repository to download the `install_go.sh` script and the game files to your computer.
 
-	```git
-	git clone https://github.com/davidtkeane/invaders.git
-	```
-	**Enter Folder:** Enter the files folder and then move to number 2.
+    ```bash
+    git clone [https://github.com/davidtkeane/invaders.git](https://github.com/davidtkeane/invaders.git)
+    ```
 
-	```bash
-	cd invaders/files
-	```
+    **Enter Folder:** Enter the files folder and then move to number 2.
+
+    ```bash
+    cd invaders/files
+    ```
 
 2.  **Make Executable:** Open a terminal and navigate to the directory where you downloaded the files. Run the following command to make the script executable:
 
@@ -68,14 +96,14 @@ This project recreates the classic arcade game Space Invaders using Go and the E
     ./install_go.sh
     ```
 
-	**The script after installing will then ask if you want to play invaders:**
+    **The script after installing will then ask if you want to play invaders:**
 
-	If you say no and want to run the script from the command line use this command:
+    If you say no and want to run the script from the command line use this command:
 
-	```bash
-	go run main.go
-	```
-	<br>
+    ```bash
+    go run main.go
+    ```
+    <br>
     The script will perform the following actions:
 
     -   Check if Go is already installed on your system.
@@ -108,20 +136,23 @@ This project recreates the classic arcade game Space Invaders using Go and the E
 
     -   Open a terminal and navigate to the directory where you saved the game files (the directory containing `main.go`).
     -   Run the following commands in order:
-        -   `go mod init example.com/spaceinvaders`: Initializes a new Go module named `example.com/spaceinvaders`. You can choose a different module name if you want. This command creates a `go.mod` file, which is used to track project dependencies.
-        -   `go mod tidy`: This is a very important command. It analyzes your code, finds all the required packages (like Ebiten and other libraries), and automatically adds them to your `go.mod` file. It also downloads the packages and their dependencies into a cache directory (usually `$GOPATH/pkg/mod`).
-        -   `go mod download golang.org/x/image`: Downloads the `golang.org/x/image` package, which is needed for image handling.
-        -   `go get github.com/golang/freetype/truetype`: Downloads the `truetype` package for font handling.
-        -   `go get github.com/hajimehoshi/ebiten/v2`: Downloads the Ebiten game library.
-        -   `go get github.com/hajimehoshi/ebiten/v2/audio`: Downloads the Ebiten audio package.
-        -   `go get github.com/hajimehoshi/ebiten/v2/audio/wav`: Downloads the Ebiten WAV audio decoder.
-        -   `go get github.com/hajimehoshi/ebiten/v2/audio/mp3`: Downloads the Ebiten MP3 audio decoder.
-        -   `go get github.com/hajimehoshi/ebiten/v2/ebitenutil`: Downloads Ebiten utilities.
-        -   `go get github.com/hajimehoshi/ebiten/v2/inpututil`: Downloads Ebiten input utilities.
-        -   `go get github.com/hajimehoshi/ebiten/v2/text`: Downloads Ebiten text rendering utilities.
-        -   `go get golang.org/x/image/font`: Downloads the font package.
 
-        - **Note:** The `go get` commands will download the specified packages and their dependencies to your Go workspace (`$GOPATH/pkg/mod`). These packages are not directly placed in your project folder. The `go.mod` and `go.sum` files keep track of the exact versions used in your project. 
+        ```bash
+        go mod init example.com/spaceinvaders [invalid URL removed]
+        go mod tidy
+        go mod download golang.org/x/image
+        go get github.com/golang/freetype/truetype [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2 [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2/audio [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2/audio/wav [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2/audio/mp3 [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2/ebitenutil [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2/inpututil [invalid URL removed]
+        go get github.com/hajimehoshi/ebiten/v2/text [invalid URL removed]
+        go get golang.org/x/image/font
+        ```
+
+    -   **Note:** The `go get` commands will download the specified packages and their dependencies to your Go workspace (`$GOPATH/pkg/mod`). These packages are not directly placed in your project folder. The `go.mod` and `go.sum` files keep track of the exact versions used in your project.
 
 ## Running the Game
 
@@ -129,53 +160,296 @@ Once you have installed the game using either method, you can run it with the fo
 
 ```bash
 go run main.go
-```
+````
 
-## Tree
+### Folder Structure
+
+Ensure that all asset files are in their respective folders as follows:
 
 ```bash
 $ tree
-
-invaders/
 .
 ├── README.md
-├── files/
-│   ├── background.wav      # Background music
-│   ├── end-game.mp3        # Game over music
-│   ├── explosion.wav       # Explosion sound effect
-│   ├── explosion-sound.mp3 # Explosion sound effect
-│   ├── game-over.mp3       # Game over sound effect
-│   ├── girlfriend.txt      # Text file (Easter egg message)
-│   ├── highscores.txt      # High scores data
-│   ├── install_go.sh       # Installation script (Bash)
-│   └── laser.wav           # Laser sound effect
-├── font/
-│   └── font.ttf            # Font file for text
-├── go.mod                  # Go module file
-├── go.sum                  # Go module checksum file
-├── images
-│   ├── collision.png
-│   ├── invaders.gif
-│   ├── space-invaders.png
-│   ├── sprites-position.png
-│   └── sprites.png
-├── imgs/
-│   ├── background-end3.jpg # Game over background image
-│   ├── bg.png              # Background image
-│   ├── sprites.png         # Spritesheet image
-│   └── start.png           # Start screen image
-└── main.go                 # Main Go source file
+├── files
+│   ├── background.wav      # 🔊 Background music
+│   ├── end-game.mp3        # 🔊 Game over music
+│   ├── explosion.wav       # 🔊 Explosion sound effect
+│   ├── explosion-sound.mp3 # 🔊 Explosion sound effect
+│   ├── game-over.mp3       # 🔊 Game over sound effect
+│   ├── girlfriend.txt      # 📄 Text file (Easter egg message)
+│   ├── highscores.txt      # 💾 High scores data
+│   ├── install_go.sh       # 💻 Installation script (Bash)
+│   └── laser.wav           # 🔊 Laser sound effect
+├── font
+│   └── font.ttf            # 🔤 Font file for text
+├── go.mod                  # 📄 Go module file
+├── go.sum                  # 📄 Go module checksum file
+├── images                  # 📂 Original Images
+│   ├── collision.png       # 💥 Image of collision in the game
+│   ├── invaders.gif        # 👾 Animated GIF of the Invaders game
+│   ├── space-invaders.png  # 👾 Space Invaders game title image
+│   ├── sprites-position.png# 👾 Positioned sprites image
+│   └── sprites.png         # 👾 Collection of game sprites
+├── imgs                    # 📂 Resized Images
+│   ├── background-end3.jpg # 🖼️ Game over background image
+│   ├── bg.png              # 🌌 Background image
+│   ├── sprites.png         # 👾 Spritesheet image
+│   └── start.png           # ▶️ Start screen image
+└── main.go                 # 👾 Main Go source file
 
 5 directories, 23 files
 ```
-<br>
-![Keybase PGP](https://img.shields.io/keybase/pgp/davidtkeane)
-![Keybase BTC](https://img.shields.io/keybase/btc/davidtkeane)
+
+**File Explanations:**
+
+  - **`main.go`:** The main Go source code file for the game. It contains the game logic, rendering functions, and initialization code.
+  - **`install_go.sh`:** A Bash script that automates the installation of Go, the required packages, and optionally runs the game.
+  - **`imgs/`:**
+      - `background-end3.jpg`: The background image used on the game over screen.
+      - `bg.png`: The background image used during gameplay.
+      - `sprites.png`: A spritesheet containing images of the aliens, cannon, laser beam, bombs, and barriers.
+  - **`files/`:**
+      - `.wav`, `.mp3`: Audio files for various sound effects (laser, explosion, game over) and background music.
+      - `highscores.txt`: Stores the high score data.
+      - `girlfriend.txt`: A text file containing a message printed by `install_go.sh`.
+  - **`font/`:**
+      - `font.ttf`: The font file used to render text in the game.
+  - **`go.mod`:** The Go module file, which lists the project's dependencies (Ebiten, image libraries, etc.).
+  - **`go.sum`:** Contains checksums of the downloaded dependencies for security and verification.
+
+## Gameplay 🎮
+
+  - **Move Cannon:** Use the left and right arrow keys ⬅️➡️ to move the laser cannon.
+  - **Fire:** Press the Spacebar 🚀 to fire the laser beam.
+  - **Pause:** Press the Esc key ⏸️ to pause/unpause the game.
+  - **Quit:** Press Q ❌ to quit the game.
+  - **Game Over:** The game ends when the aliens reach the bottom of the screen ⬇️ or when the player loses all lives 💔.
+
+**Configuration**
+You can adjust various game settings in the `main.go` file. The `HELP SECTION` at the top of the file provides detailed instructions on how to configure these settings.
+
+**Acknowledgments**
+
+  - **Original Game:** This game is based on the classic Space Invaders arcade game.
+  - **Ebiten Library:** Developed and maintained by [Hajime Hoshi](https://www.google.com/url?sa=E&source=gmail&q=https://github.com/hajimehoshi).
+  - **Original Fork:** This project is a fork of [github.com/sausheong/invaders](https://github.com/sausheong/invaders).
+  - **Developers:**
+      - [RangerSmyth](https://www.google.com/url?sa=E&source=gmail&q=https://github.com/RangerSmyth)
+      - [David T Keane](https://github.com/davidtkeane)
+
+## Contributing
+
+Contributions to this project are welcome\! If you find any bugs or want to add new features, please feel free to submit a pull request or open an issue on the GitHub repository.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/url?sa=E&source=gmail&q=LICENSE) file for details. (You'll need to add a LICENSE file to your repository if you want to specify the MIT License or any other license).
+
+## Space-Invaders
+
+## How I Updated the Space Invaders Game
+
+<details>
+<summary><b>Click to Expand</b></summary>
+
+This project started as a fork of [sausheong's Space Invaders game](https://github.com/sausheong/invaders), which was itself inspired by an Ebiten example. The original game provided a solid foundation, but I wanted to enhance it and make it more like a complete arcade experience while also using this project as a learning opportunity. Here's a summary of the updates and improvements I made, with the help of an AI chatbot:
+
+**1. Enhanced Game Over Screen:**
+
+-   **Background Image:** Added a dedicated background image (`background-end3.jpg`) for a more visually appealing game over screen. *Now includes 3 images to choose from!*
+-   **Information Box:** Implemented a semi-transparent box to frame the game over information, improving readability and organization.
+-   **Text Formatting and Positioning:**
+    -   Adjusted the font size for the "GAME OVER" message.
+    -   Carefully calculated and positioned the "GAME OVER", final score, "Play Again", "Close Game", and high scores list elements within the box.
+    -   Ensured proper spacing between text elements.
+-   **High Scores:**
+    -   Implemented a persistent high score system that loads and saves the top 5 scores to `files/highscores.txt`.
+    -   Prevented duplicate entries with the same name and score.
+    -   Displayed the high scores list on the game over screen.
+
+**2. Gameplay Improvements:**
+
+-   **Barriers:** Added destructible barriers to the game screen, providing cover for the player.
+-   **Audio:** Integrated multiple sound effects, including laser fire, alien and ship explosions, and game over sounds, to enhance the arcade experience. Also included the functionality to loop background music during gameplay. *Multiple audio files have been included to choose from*
+-   **Lives:** Added extra lives to the player for extended gameplay.
+
+**3. Code Enhancements:**
+
+-   **Refactoring:**
+    -   Split the `Draw()` function into `drawGameOverScreen()` and `drawGameScreen()` to improve code organization and readability.
+-   **Error Handling:** Added better error handling, especially when loading external resources like images and audio files.
+-   **Comments:** Included detailed comments throughout the code to explain the logic and functionality, making it easier to understand and modify.
+-   **Configuration:** Added a `HELP SECTION` at the beginning of the code with clear instructions on how to configure various game settings, audio, controls, and more.
+
+**4. Installation and Documentation:**
+
+-   **`install_go.sh`:** Created a Bash script to automate the installation of Go, necessary packages, and dependencies. The script also offers an option to run the game after installation.
+-   **`README.md`:** Wrote a comprehensive `README.md` file that includes:
+    -   A detailed description of the game and its features.
+    -   Instructions for both automatic (using `install_go.sh`) and manual installation.
+    -   A breakdown of the project's folder structure and file purposes.
+    -   Gameplay instructions.
+    -   Configuration guidelines.
+    -   Acknowledgments to the original developers and libraries used.
+    -   Contributing guidelines.
+
+**5. Collaboration and Learning:**
+
+-   This project was a collaborative effort between myself (RangerSmyth) and another developer (David T Keane).
+-   We also heavily utilized an AI chatbot as a tool to help us with debugging, refactoring, and generating ideas for improvements.
+-   The process involved a lot of back-and-forth, testing, and iterative refinement to get to the final version.
+</details>
+
+## Customization
+
+### Changing Background Images and Audio
+
+You can easily customize the background images and audio files used in the game:
+
+<details>
+<summary><b>Click to Expand</b></summary>
+
+#### Background Images
+
+1.  **Game Background:**
+    -   Replace the `imgs/bg.png` file with your desired background image.
+    -   Make sure the new image is in PNG format and has the appropriate dimensions (800x600 pixels are recommended to fit the game window).
+
+2.  **Game Over Background:**
+    -   The game over screen uses the image in `imgs/background-end3.jpg`
+    -   Replace this file with your preferred image, ensuring it's in JPG format. I have provided 3 different backgrounds to choose from, to change the background used, you will need to edit this line in the `initGame()` function:
+
+    ```go
+    bgEnd, _, err := ebitenutil.NewImageFromFile("imgs/background-end3.jpg") // Change the file name here
+    ```
+
+#### Audio Files
+
+1.  **Sound Effects:**
+    -   The sound effects are located in the `files/` directory.
+    -   You can replace the existing `.wav` or `.mp3` files (e.g., `laser.wav`, `explosion.wav`, `game-over.mp3`) with your own sound effects.
+
+2.  **Background Music:**
+    -   The background music during gameplay is `files/background.wav`. Replace this file with your desired background music.
+    -   The game over screen music is `files/end-game.mp3`. Replace this with your desired game over music.
+
+**Important:**
+
+-   Make sure the replacement images and audio files have the correct file extensions (e.g., `.png`, `.jpg`, `.wav`, `.mp3`).
+-   The game is designed to work with specific audio formats (WAV and MP3). Using other formats might require code modifications.
+
+### Modifying Game Settings
+
+You can adjust various game parameters in the `main.go` file. Here's how to modify some of the key settings:
+
+<details>
+<summary><b>Click to Expand</b></summary>
+
+1.  **Window Size:**
+
+    -   Modify `windowWidth` and `windowHeight` variables at the beginning of the `main.go` file.
+
+    ```go
+    var (
+        windowWidth      = 800
+        windowHeight     = 600
+    )
+    ```
+
+2.  **Alien Parameters:**
+
+    -   `aliensPerRow`: Number of aliens in each row.
+    -   `aliensStartCol`: Starting horizontal position of the aliens.
+    -   `alienSize`: Size of each alien sprite.
+
+    ```go
+    var (
+        aliensPerRow     = 8
+        aliensStartCol   = 100
+        alienSize        = 30
+    )
+    ```
+
+3.  **Bomb Parameters:**
+
+    -   `bombProbability`: Probability of an alien dropping a bomb in each frame (0.0 to 1.0).
+    -   `bombSpeed`: Speed at which bombs fall.
+
+    ```go
+    var (
+        bombProbability  = 0.005
+        bombSpeed        = 10
+    )
+    ```
+
+4.  **Barrier and Player Position:**
+
+    -   `barrierYPosition`: Vertical position of the barriers.
+    -   `playerYPosition`: Initial vertical position of the player's cannon.
+
+    ```go
+    var (
+        barrierYPosition = 300
+        playerYPosition  = 400
+    )
+    ```
+
+5.  **Game Over Screen Text Offsets:**
+
+    -   These variables control the vertical spacing of the text elements on the game over screen:
+
+    ```go
+    var (
+        gameOverMessageYOffset = 100 
+        finalScoreYOffset      = 150 
+        playAgainYOffset       = 100 
+        closeGameYOffset       = 100 
+        highScoresTitleYOffset = 160 
+        highScoresListYOffset  = 30  
+        highScoresListSpacing  = 20  
+    )
+    ```
+
+6.  **Other Settings:**
+
+    -   You can find many other settings and parameters throughout the code (e.g., player lives, alien movement speed, laser beam speed). Look for comments that explain what each variable does.
+
+**Important:**
+
+-   Be careful when modifying the code. Make sure you understand what each variable does before changing it.
+-   It's recommended to create a backup of your `main.go` file before making significant changes.
+-   Test your changes thoroughly after modifying any settings.
+
+</details>
+</details>
+
+## Future Improvements
+
+-   Adding a settings panel that can be opened/closed with a button
+-   Adding animation to the game
+-   Adding the ability to have 2 players at the same time
+-   Adding a pause menu with options
+-   Adding volume controls for the sound effects
+-   Implementing more complex alien movement patterns.
+-   Adding more levels and increasing difficulty.
+
+<h4 align="center"> This project has been a great learning experience, and I hope you enjoy playing this updated version of Space Invaders! 🚀 </h4>
 
 
-End of Rangers README.md. 
 
-<----->
+												DDDD     AA   V     V EEEEE
+												D   D   A  A  V     V E
+												D    D AAAAAA V     V EEEEE
+												D   D  A    A  V   V  E
+												DDDD   A    A   VVV   EEEEE
+
+\<---\>
+
+<h1 align="center">👾 Space Invaders by Sausheong 🚀 </h1>
+
+![Space Invaders](images/space-invaders.png)
+
+
 The Start of Space Invaders by [sausheong](https://github.com/sausheong/invaders)
 
 # Writing Space Invaders with Go
