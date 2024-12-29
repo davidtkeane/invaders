@@ -181,6 +181,7 @@ $ tree
 │   ├── girlfriend.txt      # 📄 Text file (Easter egg message)
 │   ├── highscores.txt      # 💾 High scores data
 │   ├── install_go.sh       # 💻 Installation script (Bash)
+│   ├── install_github.sh   # 💻 Installation script for Github repo's (Bash)
 │   └── laser.wav           # 🔊 Laser sound effect
 ├── font
 │   └── font.ttf            # 🔤 Font file for text
@@ -199,7 +200,7 @@ $ tree
 │   └── start.png           # ▶️ Start screen image
 └── main.go                 # 👾 Main Go source file
 
-5 directories, 23 files
+5 directories, 25 files
 ```
 
 **File Explanations:**
