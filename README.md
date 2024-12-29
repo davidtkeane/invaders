@@ -439,11 +439,11 @@ You can adjust various game parameters in the `main.go` file. Here's how to modi
 
 
 
-						DDDD     AA   V     V EEEEE
-						D   D   A  A  V     V E
-						D    D AAAAAA V     V EEEEE
-						D   D  A    A  V   V  E
-						DDDD   A    A   VVV   EEEEE
+DDDD     AA   V     V EEEEE
+D   D   A  A  V     V E
+D    D AAAAAA V     V EEEEE
+D   D  A    A  V   V  E
+DDDD   A    A   VVV   EEEEE
 
 \<---\>
 
