@@ -173,6 +173,8 @@ $ tree
 ├── files
 │   ├── background.wav      # 🔊 Background music
 │   ├── end-game.mp3        # 🔊 Game over music
+│   ├── game-over2.wav		# 🔊 Game over music
+│   ├── game-over3.mp3		# 🔊 Game over music
 │   ├── explosion.wav       # 🔊 Explosion sound effect
 │   ├── explosion-sound.mp3 # 🔊 Explosion sound effect
 │   ├── game-over.mp3       # 🔊 Game over sound effect
